@@ -16,7 +16,7 @@
     <div class="container">
         <textarea class="textarea" placeholder="Enter query..."></textarea>
 
-        <span v-on:click="submit"  id="submit-button" class="button is-success is-fullwidth">Run query</span>
+        <span v-on:click="submit"  id="submit-button" class="button is-success is-fullwidth" :disabled="isLoading">Run query</span>
 
 
         <div v-if="isLoading" id="progress-bar" class="container">
