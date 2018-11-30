@@ -1,0 +1,44 @@
+/* Source:
+https://picturepan2.github.io/spectre/experimentals.html#progress
+https://github.com/picturepan2/spectre/blob/master/src/_progress.scss
+*/
+.progress {
+    background: #DBDBDB;
+}
+.progress::-webkit-progress-bar {
+    background: transparent !important;
+}
+.progress:indeterminate {
+    animation: progress-indeterminate 1.5s linear infinite;
+    background: #DBDBDB linear-gradient(to right, #4a4a4a 30%, #DBDBDB 30%) top left/150% 150% no-repeat;
+}
+.progress:indeterminate::-moz-progress-bar {
+    background: transparent !important;
+}
+.progress:indeterminate.is-primary {
+    background: #DBDBDB linear-gradient(to right, #00D1B2 30%, #DBDBDB 30%) top left/150% 150% no-repeat;
+}
+.progress:indeterminate.is-link {
+    background: #DBDBDB linear-gradient(to right, #209CEE 30%, #DBDBDB 30%) top left/150% 150% no-repeat;
+}
+.progress:indeterminate.is-info {
+    background: #DBDBDB linear-gradient(to right, #3273DC 30%, #DBDBDB 30%) top left/150% 150% no-repeat;
+}
+.progress:indeterminate.is-success {
+    background: #DBDBDB linear-gradient(to right, #23D160 30%, #DBDBDB 30%) top left/150% 150% no-repeat;
+}
+.progress:indeterminate.is-warning {
+    background: #DBDBDB linear-gradient(to right, #FFDD57 30%, #DBDBDB 30%) top left/150% 150% no-repeat;
+}
+.progress:indeterminate.is-danger {
+    background: #DBDBDB linear-gradient(to right, #FF3860 30%, #DBDBDB 30%) top left/150% 150% no-repeat;
+}
+
+@keyframes progress-indeterminate {
+    0% {
+        background-position: 100% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
