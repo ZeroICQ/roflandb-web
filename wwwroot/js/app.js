@@ -59,6 +59,9 @@ const store = new Vuex.Store({
     modules: {}
 });
 
+const ServerForm = new Vue({
+    
+});
 
 const SubmitButton = new Vue({
     el: "#submit-button",

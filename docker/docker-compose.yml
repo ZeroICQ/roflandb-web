@@ -14,3 +14,4 @@ services:
       MYSQL_PASSWORD: "app"
       MYSQL_DATABASE: "app"
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_HOST: 127.0.0.1

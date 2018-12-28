@@ -1,24 +1,26 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Encodings.Web;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using RoflandbWeb.Services;
 
 namespace RoflandbWeb.Controllers
 {
+    
     [ApiController]
     [Route("api/")]
     public class ApiController : ControllerBase {
+
+        private MysqlConnector _mysql; 
         
+        public ApiController(MysqlConnector mysql) {
+            _mysql = mysql;
+        }
+
         [HttpPost("sql")]
-        public string Test() {
-            var list = new List<string>();
-            list.Add("kek");
-            list.Add("kek1");
-            list.Add("kek1");
-            return JsonConvert.SerializeObject(list);
+        public string Sql([FromBody] string user, [FromBody] string password, [FromBody] string server,
+            [FromBody] int port,  [FromBody] string database, [FromBody] string query) 
+        {
+            
+            return _mysql.Execute(user, password, server, port, database, query);
         }
     }
 }

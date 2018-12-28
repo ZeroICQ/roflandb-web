@@ -13,10 +13,27 @@
 <body>
 <div id="app"></div>
 <section class="section">
+    
+    <div class="container">
+        
+        <div class="field">
+            <label class="label"></label>
+            <div class="control">
+                <div class="select">
+                    <select>
+                        <option>Select dropdown</option>
+                        <option>With options</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
     <div class="container">
         <textarea class="textarea" placeholder="Enter query..."></textarea>
 
-        <span v-on:click="submit"  id="submit-button" class="button is-success is-fullwidth" :disabled="isLoading">Run query</span>
+        <span v-on:click="submit" id="submit-button" class="button is-success is-fullwidth" :disabled="isLoading">Run query</span>
 
 
         <div v-if="isLoading" id="progress-bar" class="container">
@@ -25,7 +42,7 @@
 
         <table id="result-table" v-if="!isLoading" class="table is-bordered is-hoverable is-fullwidth">
             <thead>
-                <th v-for="title in titles">{{title}}</th>
+            <th v-for="title in titles">{{title}}</th>
             </thead>
             <tbody>
             <tr v-for="line in data">
