@@ -1,13 +1,11 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using RoflandbWeb.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace RoflandbWeb.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
-        {
+        public IActionResult Index() {
+            
             return View();
         }
 
