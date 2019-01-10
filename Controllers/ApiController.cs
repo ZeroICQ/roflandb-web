@@ -1,4 +1,5 @@
 using System.Linq;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using RoflandbWeb.Models;
@@ -15,6 +16,7 @@ namespace RoflandbWeb.Controllers {
         }
 
         [HttpPost("sql")]
+        [EnableCors("AnyCors")]
         public IActionResult Sql([FromBody] SqlRequestModel r) {
             if (!ModelState.IsValid)
                 return new JsonResult(new {errors = ModelState });

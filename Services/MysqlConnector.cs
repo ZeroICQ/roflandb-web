@@ -16,9 +16,9 @@ namespace RoflandbWeb.Services {
 
                 var resultReader = command.ExecuteReader();
                 var result = new List<object>();
-                var row = new object[resultReader.FieldCount];
-
+                
                 while (resultReader.Read()) {
+                    var row = new object[resultReader.FieldCount];
                     resultReader.GetValues(row);
                     result.Add(row);
                 }
