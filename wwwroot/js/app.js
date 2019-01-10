@@ -13,30 +13,20 @@ const store = new Vuex.Store({
         database: ""
     },
     actions: {
-        loadData({commit}) {
+        loadData({commit, state}) {
             commit('SET_LOADING');
+            axios.post("http://localhost:5000/api/Sql", {
+                user: state.username,
+                password: state.password,
+                host: state.host,
+                database: state.database,
+                port: state.port,
+                query: state.query
+            }).then(response => {
+                state.data = response.data;
+                commit('SET_NOT_LOADING');
+            }).catch(e => console.log(e));
             
-            this.state.titles = ['id', 'phone', 'name'];
-            let max = 100;
-            let min = 1;
-
-            let phoneMax = 79141999999;
-            let phoneMin = 79141000000;
-            
-            
-            
-            let ldata = [];
-            
-            for (var i = 0; i < 20; i++) {
-                let sample_data = [Math.floor(Math.random() * (max - min + 1)) + min,
-                    Math.floor(Math.random() * (phoneMax - phoneMin+ 1)) + phoneMin,
-                    "Alexey"];
-                ldata.push(sample_data)
-            }
-            
-            this.state.data = ldata;
-            
-            setTimeout(() => commit('SET_NOT_LOADING'), 3000);
         },
 
         updateQuery({commit}, value) {
