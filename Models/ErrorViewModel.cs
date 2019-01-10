@@ -1,9 +1,7 @@
 using System;
 
-namespace RoflandbWeb.Models
-{
-    public class ErrorViewModel
-    {
+namespace RoflandbWeb.Models {
+    public class ErrorViewModel {
         public string RequestId { get; set; }
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
