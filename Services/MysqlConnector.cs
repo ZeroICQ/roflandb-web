@@ -8,23 +8,25 @@ namespace RoflandbWeb.Services {
             var connectionString =
                 $"Database={database}; Data Source={server}; Port={port}; User Id={user};Password={password}";
 
-            var con = new MySqlConnection(connectionString);
-            var command = new MySqlCommand(query, con);
+            using (var con = new MySqlConnection(connectionString)) {
 
-            con.Open();
+                var command = new MySqlCommand(query, con);
 
-            var resultReader = command.ExecuteReader();
-            var result = new List<object>();
-            var row = new object[resultReader.FieldCount];
+                con.Open();
 
-            while (resultReader.Read()) {
-                resultReader.GetValues(row);
-                result.Add(row);
+                var resultReader = command.ExecuteReader();
+                var result = new List<object>();
+                var row = new object[resultReader.FieldCount];
+
+                while (resultReader.Read()) {
+                    resultReader.GetValues(row);
+                    result.Add(row);
+                }
+
+                con.Close();
+
+                return result;
             }
-
-            con.Close();
-
-            return result;
         }
     }
 }

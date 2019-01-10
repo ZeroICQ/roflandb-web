@@ -1,4 +1,6 @@
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using MySql.Data.MySqlClient;
 using RoflandbWeb.Models;
 using RoflandbWeb.Services;
 
@@ -6,7 +8,7 @@ namespace RoflandbWeb.Controllers {
     [ApiController]
     [Route("api/")]
     public class ApiController : ControllerBase {
-        private MysqlConnector _mysql;
+        private readonly MysqlConnector _mysql;
 
         public ApiController(MysqlConnector mysql) {
             _mysql = mysql;
@@ -14,7 +16,16 @@ namespace RoflandbWeb.Controllers {
 
         [HttpPost("sql")]
         public IActionResult Sql([FromBody] SqlRequestModel r) {
-            return new JsonResult(_mysql.Execute(r.User, r.Password, r.Host, r.Port, r.Database, r.Query));
+            if (!ModelState.IsValid)
+                return new JsonResult(new {errors = ModelState });
+                    
+            try {
+                return new JsonResult(_mysql.Execute(r.User, r.Password, r.Host, r.Port, r.Database, r.Query));
+            }
+            catch (MySqlException e) {
+                return new JsonResult( new {Error = e.Message});
+            }
+            
         }
     }
 }

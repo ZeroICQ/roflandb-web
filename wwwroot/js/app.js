@@ -4,7 +4,8 @@ const store = new Vuex.Store({
     state: {
         isLoading: false,
         titles: [],
-        data: []
+        data: [],
+        query: ""
     },
     actions: {
         loadData({commit}) {
@@ -31,6 +32,10 @@ const store = new Vuex.Store({
             this.state.data = ldata;
             
             setTimeout(() => commit('SET_NOT_LOADING'), 3000);
+        },
+
+        updateQuery({commit}, value) {
+            commit("SET_QUERY", value)
         }
     },
     mutations: {
@@ -40,6 +45,10 @@ const store = new Vuex.Store({
         
         SET_NOT_LOADING(state) {
             state.isLoading = false;
+        },
+        
+        SET_QUERY(state, value) {
+            state.query = value;
         }
     },
     getters: {
@@ -53,14 +62,34 @@ const store = new Vuex.Store({
         
         titles(state) {
             return state.titles;
+        },
+        
+        query(state) {
+            return state.query;
         }
         
     },
     modules: {}
 });
 
-const ServerForm = new Vue({
-    
+const DatabaseForm = new Vue({
+    el: "#db-form",
+    store
+});
+
+const QueryTextArea  = new Vue({
+    el: "#query",
+    store,
+    computed: {
+        query: {
+            get () {
+                return this.$store.getters.query
+            },
+            set (value) {
+                this.$store.dispatch("updateQuery", value)
+            }
+        }
+    }
 });
 
 const SubmitButton = new Vue({
