@@ -5,7 +5,12 @@ const store = new Vuex.Store({
         isLoading: false,
         titles: [],
         data: [],
-        query: ""
+        query: "",
+        username: "",
+        password: "",
+        host: "",
+        port:  3307,
+        database: ""
     },
     actions: {
         loadData({commit}) {
@@ -36,7 +41,27 @@ const store = new Vuex.Store({
 
         updateQuery({commit}, value) {
             commit("SET_QUERY", value)
-        }
+        },
+
+        updateUsername({commit}, value) {
+            commit("SET_USERNAME", value)
+        },
+        
+        updatePassword({commit}, value) {
+            commit("SET_PASSWORD", value)
+        },
+
+        updateHost({commit}, value) {
+            commit("SET_HOST", value)
+        },
+
+        updatePort({commit}, value) {
+            commit("SET_PORT", value)
+        },
+
+        updateDatabase({commit}, value) {
+            commit("SET_DATABASE", value)
+        },
     },
     mutations: {
         SET_LOADING(state) {
@@ -49,7 +74,28 @@ const store = new Vuex.Store({
         
         SET_QUERY(state, value) {
             state.query = value;
-        }
+        },
+        
+        SET_USERNAME(state, value) {
+            state.username = value;
+        },
+
+        SET_PASSWORD(state, value) {
+            state.password = value;
+        },
+        
+        SET_HOST(state, value) {
+            state.host = value;
+        },
+
+        SET_PORT(state, value) {
+            state.port = value;
+        },
+
+        SET_DATABASE(state, value) {
+            state.database = value;
+        },
+        
     },
     getters: {
         isLoading(state) { 
@@ -66,15 +112,80 @@ const store = new Vuex.Store({
         
         query(state) {
             return state.query;
-        }
-        
+        },
+
+        username(state) {
+            return state.username;
+        },
+
+        password(state) {
+            return state.password;
+        },
+
+        host(state) {
+            return state.host;
+        },
+
+        port(state) {
+            return state.port;
+        },
+
+        database(state) {
+            return state.database;
+        },
     },
     modules: {}
 });
 
 const DatabaseForm = new Vue({
     el: "#db-form",
-    store
+    store,
+    computed: {
+        username : {
+            get () {
+                return this.$store.getters.username
+            },
+            set (value) {
+                this.$store.dispatch("updateUsername", value)
+            }
+        },
+
+        password : {
+            get () {
+                return this.$store.getters.password
+            },
+            set (value) {
+                this.$store.dispatch("updatePassword", value)
+            }
+        },
+
+        host : {
+            get () {
+                return this.$store.getters.host
+            },
+            set (value) {
+                this.$store.dispatch("updateHost", value)
+            }
+        },
+
+        port : {
+            get () {
+                return this.$store.getters.port
+            },
+            set (value) {
+                this.$store.dispatch("updatePort", value)
+            }
+        },
+
+        database : {
+            get () {
+                return this.$store.getters.database
+            },
+            set (value) {
+                this.$store.dispatch("updateDatabase", value)
+            }
+        },
+    }
 });
 
 const QueryTextArea  = new Vue({

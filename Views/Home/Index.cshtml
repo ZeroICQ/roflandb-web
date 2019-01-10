@@ -15,7 +15,7 @@
 <div class="tile is-ancestor">
     <div class="tile is-vertical is-12 is-parent">
         <div class="tile is-12 is-parent">
-            <div class="container is-child">
+            <div class="container is-child" id="db-form">
     
                 <div class="field">
                     <label class="label"></label>
@@ -30,20 +30,46 @@
                 </div>
     
     
-                <div class="field is-horizontal" id="db-form">
+                <div class="field is-horizontal">
                     <div class="field-label is-normal">
                         <label class="label">Credentials</label>
                     </div>
                     <div class="field-body">
                         <div class="field">
                             <p class="control is-expanded">
-                                <input class="input" type="text" placeholder="Username">
+                                <input class="input" type="text" v-model="username" placeholder="Username">
                             </p>
                         </div>
                         
                         <div class="field">
                             <p class="control is-expanded">
-                                <input class="input" type="password" placeholder="Password">
+                                <input class="input" type="password" v-model="password" placeholder="Password">
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="field is-horizontal" id="db-form">
+                    <div class="field-label is-normal">
+                        <label class="label">Host</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <p class="control is-expanded">
+                                <input class="input" type="text" v-model="host" placeholder="IP">
+                            </p>
+                        </div>
+                        
+                        <div class="field">
+                            <p class="control is-expanded">
+                                <input class="input" type="number" v-model="port" placeholder="port" min="1" max="65000">
+                            </p>
+                        </div>
+                        
+                        <div class="field">
+                            <p class="control is-expanded">
+                                <input class="input" type="text" v-model="database" placeholder="database">
                             </p>
                         </div>
                     </div>
