@@ -23,7 +23,7 @@
                         <label class="label">Presets</label>
                     </div>
                     <div class="field-body">
-                        <div class="field">
+                        <div class="field is-narrow">
                             <div class="control">
                                 <div class="select is-success">
                                     <select v-model="selectedPreset">
@@ -32,6 +32,18 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <div class="field">
+                            <div class="control">
+                                <div class="select is-success is-narrow">
+                                    <select v-model="selectedQuery">
+                                        <option></option>
+                                        <option v-for="(query, name) in availableQueries" :value=name>{{name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
     

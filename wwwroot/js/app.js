@@ -3,6 +3,15 @@ Vue.use(Vuex);
 const presets = ["", "MySQL", "Postgres"];
 const dbTypes = ["MySQL", "Postgres"];
 
+const MysqlQueries = {
+    "* from country": "select * from country",
+    "tables": "show tables"
+};
+
+const PostgresQueries = {
+    "kek": "todo",
+};
+
 const CancelToken = axios.CancelToken;
 var source;
 
@@ -23,6 +32,8 @@ const store = new Vuex.Store({
         
         selectedPreset: 0,
         selectedDbType: 0,
+        availableQueries: {},
+        selectedQuery: "",
     },
     actions: {
         loadData({commit, state}) {
@@ -82,6 +93,9 @@ const store = new Vuex.Store({
         updateSelectedPreset({commit}, value) {
             commit("SET_SELECTEDPRESET", value);
             switch (value) {
+                case 0:
+                    commit("SET_AVAILABLEQUERIES", {});
+                    break;
                 //MySQL
                 case 1:
                     commit("SET_USERNAME", "app");
@@ -90,7 +104,7 @@ const store = new Vuex.Store({
                     commit("SET_HOST", "127.0.0.1");
                     commit("SET_PORT", "3307");
                     commit("SET_SELECTEDDBTYPE", 0);
-                    commit("SET_QUERY", "select * from users");
+                    commit("SET_AVAILABLEQUERIES", MysqlQueries);
                     break;
                 case 2:
                     commit("SET_USERNAME", "postgres-user");
@@ -99,7 +113,7 @@ const store = new Vuex.Store({
                     commit("SET_HOST", "127.0.0.1");
                     commit("SET_PORT", "5433");
                     commit("SET_SELECTEDDBTYPE", 1);
-                    commit("SET_QUERY", "select * from users");
+                    commit("SET_AVAILABLEQUERIES", PostgresQueries);
                     break
             }
         },
@@ -142,6 +156,11 @@ const store = new Vuex.Store({
             commit("SET_SELECTEDPRESET", 0);
             commit("SET_DATABASE", value)
         },
+
+        updateSelectedQuery({commit, state}, value) {
+            commit("SET_SELECTEDQUERY", value)
+            commit("SET_QUERY", state.availableQueries[value]);
+        }
     },
     mutations: {
         SET_LOADING(state) {
@@ -190,6 +209,14 @@ const store = new Vuex.Store({
         
         SET_SELECTEDDBTYPE(state, value) {
             state.selectedDbType = value;
+        },
+
+        SET_SELECTEDQUERY(state, value) {
+            state.selectedQuery = value;
+        },
+        
+        SET_AVAILABLEQUERIES(state, value) {
+            state.availableQueries = value;
         }
         
     },
@@ -244,7 +271,16 @@ const store = new Vuex.Store({
         
         selectedDbType(state) {
             return state.selectedDbType;
+        },
+        
+        selectedQuery(state) {
+            return state.selectedQuery;
+        },
+        
+        availableQueries(state) {
+            return state.availableQueries;
         }
+        
     },
     modules: {}
 });
@@ -308,6 +344,19 @@ const DatabaseForm = new Vue({
             },
             set (value) {
                 this.$store.dispatch("updateSelectedPreset", value)
+            }
+        },
+
+        availableQueries() {
+                return this.$store.getters.availableQueries
+        },
+        
+        selectedQuery: {
+            get() {
+                return this.$store.getters.selectedQuery
+            },
+            set (value) {
+                this.$store.dispatch("updateSelectedQuery", value)
             }
         },
 
