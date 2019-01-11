@@ -5,10 +5,14 @@
     <meta charset="UTF-8"/>
     <link type="text/css" rel="stylesheet" href="node_modules/bulma/css/bulma.css"/>
     <link type="text/css" rel="stylesheet" href="css/style.css"/>
+    <link type="text/css" rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css"/>
+    <link type="text/css" rel="stylesheet" href="node_modules/codemirror/theme/seti.css"/>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script defer src="node_modules/vuex/dist/vuex.js"></script>
     <script defer src="node_modules/vue/dist/vue.js"></script>
     <script defer src="node_modules/axios/dist/axios.min.js"></script>
+    <script defer src="node_modules/codemirror/lib/codemirror.js"></script>
     <script defer src="js/app.js"></script>
 </head>
 
@@ -114,7 +118,7 @@
         <div class="tile is-12 is-parent">
     
             <div class="container is-child">
-                <textarea id="query" class="textarea" placeholder="Enter query..." v-model="query" @@keyup.ctrl.enter="submit"></textarea>
+                <textarea id="query" ref="query" class="textarea" placeholder="Enter query..." v-model="query" @@keyup.ctrl.enter="submit" ></textarea>
     
                 <button v-on:click="submit" id="submit-button" class="button is-success is-fullwidth" :disabled="isLoading">Run query</button>
     

@@ -374,6 +374,26 @@ const DatabaseForm = new Vue({
 const QueryTextArea  = new Vue({
     el: "#query",
     store,
+    mounted: function () {
+        var that = this;
+        // `this` points to the vm instance
+        this.editor = CodeMirror.fromTextArea(this.$refs["query"], {
+            theme: "seti",
+            extraKeys: {
+                "Ctrl-Enter": function(cm) {
+                    that.$store.dispatch('loadData');
+                }
+            }
+        });
+        
+        this.editor.on("change", function (instance, changeObj) {
+            that.query = instance.getValue();
+        });
+
+        this.editor.on("keyHandled", function (instance, name, event) {
+            console.log(name);
+        });
+    },
     computed: {
         query: {
             get () {
@@ -382,6 +402,13 @@ const QueryTextArea  = new Vue({
             set (value) {
                 this.$store.dispatch("updateQuery", value);
             }
+        }
+    },
+    watch: {
+        query: function(val) {
+            this.editor.focus();
+            this.editor.setValue(val);
+            this.editor.setCursor(this.editor.lineCount(), -1);
         }
     },
     methods: {
