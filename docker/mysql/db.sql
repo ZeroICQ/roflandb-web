@@ -1,10 +1,10 @@
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS users;
 
-create table `users` (
-  `id`       int not null auto_increment,
-  `login`    varchar(255) not null unique,
-  `password` char(60) not null,
-  PRIMARY KEY (`id`)
+create table users (
+  id       int not null auto_increment,
+  login    varchar(255) not null unique,
+  password char(60) not null,
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE user_info
@@ -21,6 +21,6 @@ CREATE UNIQUE INDEX user_info_id_uindex ON user_info (id);
 CREATE UNIQUE INDEX user_info_user_id_uindex ON user_info (user_id);
 
 #test:test
-INSERT INTO `users`(`id`, `login`, `password`) VALUES (1, 'test', '$2y$10$yiP9y4y5AE7lqDZCJpyZ8eIEEw/s8G7pt74Xb6EuOLnI8.axOHFLO');
-INSERT INTO `user_info`(`user_id`) VALUES (1);
+INSERT INTO users(id, login, password) VALUES (1, 'test', '$2y$10$yiP9y4y5AE7lqDZCJpyZ8eIEEw/s8G7pt74Xb6EuOLnI8.axOHFLO');
+INSERT INTO user_info(user_id) VALUES (1);
 

@@ -67,13 +67,26 @@
                     <div class="field-label is-normal">
                         <label class="label">Host</label>
                     </div>
+                    
+                    
                     <div class="field-body">
+                        
+                        <div class="field is-narrow">
+                            <div class="control is-expanded">
+                                <div class="select is-primary">
+                                    <select v-model="dbType">
+                                        <option v-for="(type, index) in dbTypes" :value=index>{{type}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div class="field">
                             <p class="control is-expanded">
                                 <input class="input" type="text" v-model="host" placeholder="IP">
                             </p>
                         </div>
-                        
+
                         <div class="field">
                             <p class="control is-expanded">
                                 <input class="input" type="number" v-model="port" placeholder="port" min="1" max="65535">

@@ -1,6 +1,7 @@
 Vue.use(Vuex);
 
 const presets = ["", "MySQL", "Postgres"];
+const dbTypes = ["MySQL", "Postgres"];
 
 const CancelToken = axios.CancelToken;
 var source;
@@ -20,7 +21,8 @@ const store = new Vuex.Store({
         showError: false,
         errorMessage: "",
         
-        selectedPreset: 0
+        selectedPreset: 0,
+        selectedDbType: 0,
     },
     actions: {
         loadData({commit, state}) {
@@ -45,7 +47,8 @@ const store = new Vuex.Store({
                     host: state.host,
                     database: state.database,
                     port: state.port,
-                    query: state.query
+                    query: state.query,
+                    dbtype: state.selectedDbType
                 }
             }).then(response => {
                 state.data = response.data;
@@ -71,7 +74,7 @@ const store = new Vuex.Store({
         },
         
         abortPendingRequest({commit}) {
-            source.cancel("Abort by user");
+            source.cancel("Abort by user");dbType
             commit("SET_LOADING", false);
         },
 
@@ -85,13 +88,28 @@ const store = new Vuex.Store({
                     commit("SET_DATABASE", "app");
                     commit("SET_HOST", "127.0.0.1");
                     commit("SET_PORT", "3307");
+                    commit("SET_SELECTEDDBTYPE", 0);
                     commit("SET_QUERY", "select * from users");
                     break;
+                case 2:
+                    commit("SET_USERNAME", "postgres-user");
+                    commit("SET_PASSWORD", "postgres-password");
+                    commit("SET_DATABASE", "rnddbname");
+                    commit("SET_HOST", "127.0.0.1");
+                    commit("SET_PORT", "5433");
+                    commit("SET_SELECTEDDBTYPE", 1);
+                    commit("SET_QUERY", "select * from users");
+                    break
             }
         },
-        
+
         closeErrorNotification({commit}, value) {
             commit("SET_ERRORSHOW", value)
+        },
+
+        updateSelectedDbType({commit}, value) {
+            commit("SET_SELECTEDPRESET", 0);
+            commit("SET_SELECTEDDBTYPE", value);
         },
         
         updateQuery({commit}, value) {
@@ -167,6 +185,10 @@ const store = new Vuex.Store({
         
         SET_SELECTEDPRESET(state, value) {
             state.selectedPreset = value;
+        },
+        
+        SET_SELECTEDDBTYPE(state, value) {
+            state.selectedDbType = value;
         }
         
     },
@@ -217,6 +239,10 @@ const store = new Vuex.Store({
         
         selectedPreset(state) {
             return state.selectedPreset;
+        },
+        
+        selectedDbType(state) {
+            return state.selectedDbType;
         }
     },
     modules: {}
@@ -226,7 +252,8 @@ const DatabaseForm = new Vue({
     el: "#db-form",
     store,
     data: {
-      presets : presets  
+      presets : presets,
+      dbTypes: dbTypes,  
     },
     computed: {
         username : {
@@ -280,6 +307,15 @@ const DatabaseForm = new Vue({
             },
             set (value) {
                 this.$store.dispatch("updateSelectedPreset", value)
+            }
+        },
+
+        dbType: {
+            get() {
+                return this.$store.getters.selectedDbType
+            },
+            set (value) {
+                this.$store.dispatch("updateSelectedDbType", value)
             }
         }
     }

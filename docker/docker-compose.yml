@@ -15,3 +15,17 @@ services:
       MYSQL_DATABASE: "app"
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_ROOT_HOST: 127.0.0.1
+      
+      
+  postgres:
+    image: postgres:11-alpine
+    ports:
+      - 5433:5432
+    volumes:
+      - ../dump/postgres/:/var/lib/postgresql/data
+#      - ./mysql/db.sql:/docker-entrypoint-initdb.d/db.sql
+    environment:
+      POSTGRES_USER: "postgres-user"
+      POSTGRES_PASSWORD: "postgres-password"
+      POSTGRES_DB: "rnddbname"
+      

@@ -1,22 +1,22 @@
 using System.Collections.Generic;
-using MySql.Data.MySqlClient;
-using Newtonsoft.Json;
+using Npgsql;
 
 namespace RoflandbWeb.Services {
-    public class MysqlConnector : IDbConnector {
+    
+    public class PostgresConnector : IDbConnector {
         public object Execute(string user, string password, string server, int port, string database, string query) {
             var connectionString =
-                $"Database={database}; Data Source={server}; Port={port}; User Id={user};Password={password}";
+                $"Database={database}; Host={server}; Port={port}; User Id={user};Password={password}";
 
-            using (var con = new MySqlConnection(connectionString)) {
+            using (var con = new NpgsqlConnection(connectionString)) {
 
-                var command = new MySqlCommand(query, con);
+                var command = new NpgsqlCommand(query, con);
 
                 con.Open();
 
                 var resultReader = command.ExecuteReader();
                 var result = new List<object>();
-                
+
                 while (resultReader.Read()) {
                     var row = new object[resultReader.FieldCount];
                     resultReader.GetValues(row);
