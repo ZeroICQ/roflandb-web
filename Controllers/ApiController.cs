@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Microsoft.AspNetCore.Cors;
@@ -27,16 +28,20 @@ namespace RoflandbWeb.Controllers {
                 return BadRequest(new {validationErrors = ModelState });
 
             try {
-
+                IEnumerable<string> titles = null;
+                IEnumerable<object> result = null;
+                    ;
                 switch (r.DbType) {
                     case SqlRequestModel.DbTypeEnum.Mysql:
-                        return new JsonResult(_mysql.Execute(r.User, r.Password, r.Host, r.Port, r.Database, r.Query));
+                        (titles, result) = _mysql.Execute(r.User, r.Password, r.Host, r.Port, r.Database, r.Query);
+                        break;
+                        
                     case SqlRequestModel.DbTypeEnum.Postgres:
-                        return new JsonResult(
-                            _postgres.Execute(r.User, r.Password, r.Host, r.Port, r.Database, r.Query));
+                        (titles, result) =_postgres.Execute(r.User, r.Password, r.Host, r.Port, r.Database, r.Query);
+                        break;
                 }
-
-                return BadRequest(new {error = "Unknown db type"});
+                
+                return new JsonResult(new {titles=titles, result=result});
 
             }
             catch (MySqlException e) {

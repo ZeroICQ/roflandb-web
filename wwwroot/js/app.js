@@ -36,7 +36,7 @@ const store = new Vuex.Store({
             axios({
                 method: "POST",
                 url: "http://127.0.0.1:5000/api/sql",
-                timeout: 5000,
+                timeout: 20000,
                 headers : {
                     "Content-Type": "application/json"
                 },
@@ -51,7 +51,8 @@ const store = new Vuex.Store({
                     dbtype: state.selectedDbType
                 }
             }).then(response => {
-                state.data = response.data;
+                state.titles = response.data.titles;
+                state.data = response.data.result;
             }).catch(
                 e => {
                     if (axios.isCancel(e)) {
@@ -74,7 +75,7 @@ const store = new Vuex.Store({
         },
         
         abortPendingRequest({commit}) {
-            source.cancel("Abort by user");dbType
+            source.cancel("Abort by user");
             commit("SET_LOADING", false);
         },
 

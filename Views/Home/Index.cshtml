@@ -117,17 +117,18 @@
                     <button class="delete" v-on:click="closeNotification"></button>
                     {{errorMessage}}
                 </div>
-    
-                <table id="result-table" v-if="!isLoading" v-cloak class="table is-bordered is-hoverable is-fullwidth">
-                    <thead>
-                    <th v-for="title in titles">{{title}}</th>
-                    </thead>
-                    <tbody>
-                    <tr v-for="line in data">
-                        <td v-for="col in line">{{col}}</td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div class="table-container">
+                    <table id="result-table" v-if="!isLoading" v-cloak class="table is-bordered is-hoverable is-fullwidth table-container">
+                        <thead>
+                        <th v-for="title in titles">{{title}}</th>
+                        </thead>
+                        <tbody>
+                        <tr v-for="line in data">
+                            <td v-for="col in line">{{col}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

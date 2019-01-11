@@ -46,3 +46,7 @@ https://github.com/picturepan2/spectre/blob/master/src/_progress.scss
 [v-cloak] { 
     display: none !important
 }
+
+.table-wrapper {
+    overflow-x: auto;
+}
