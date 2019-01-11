@@ -15,7 +15,7 @@ const store = new Vuex.Store({
     actions: {
         loadData({commit, state}) {
             commit('SET_LOADING');
-            axios.post("http://localhost:5000/api/Sql", {
+            axios.post("http://127.0.0.1:5000/api/sql", {
                 user: state.username,
                 password: state.password,
                 host: state.host,
@@ -187,7 +187,7 @@ const QueryTextArea  = new Vue({
                 return this.$store.getters.query
             },
             set (value) {
-                this.$store.dispatch("updateQuery", value)
+                this.$store.dispatch("updateQuery", value);
             }
         }
     }
@@ -206,7 +206,8 @@ const SubmitButton = new Vue({
     },
     methods: {
         submit() {
-            this.$store.dispatch('loadData');
+            if (!this.$store.getters.isLoading)
+                this.$store.dispatch('loadData');
         }
     }
 });
