@@ -7,7 +7,6 @@ namespace RoflandbWeb.Services {
         public (IEnumerable<string>, IEnumerable<object>) Execute(string user, string password, string server, int port, string database, string query) {
             var connectionString =
                 $"Database={database}; Data Source={server}; Port={port}; User Id={user};Password={password}";
-
             using (var con = new MySqlConnection(connectionString)) {
 
                 var command = new MySqlCommand(query, con);

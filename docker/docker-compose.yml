@@ -23,9 +23,25 @@ services:
       - 5433:5432
     volumes:
       - ../dump/postgres/:/var/lib/postgresql/data
-#      - ./mysql/db.sql:/docker-entrypoint-initdb.d/db.sql
+      - ./postgres/sql/:/docker-entrypoint-initdb.d/
     environment:
       POSTGRES_USER: "postgres-user"
       POSTGRES_PASSWORD: "postgres-password"
       POSTGRES_DB: "rnddbname"
 
+  maria:
+    image: mariadb:10
+    ports:
+      - 3308:3306
+    volumes:
+      - ./mysql/mysql.d:/etc/mysql/conf.d
+      - ../dump/maria/:/var/lib/mysql
+      - ./mysql/sql/:/docker-entrypoint-initdb.d/
+    environment:
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_USER: "app"
+      MYSQL_PASSWORD: "app"
+      MYSQL_DATABASE: "app"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_HOST: %
+  

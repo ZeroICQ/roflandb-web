@@ -9,7 +9,10 @@ const MysqlQueries = {
 };
 
 const PostgresQueries = {
-    "kek": "todo",
+    "show tables": "SELECT table_name\n" +
+        "  FROM information_schema.tables\n" +
+        " WHERE table_schema='public'\n" +
+        "   AND table_type='BASE TABLE';",
 };
 
 const CancelToken = axios.CancelToken;
@@ -129,9 +132,11 @@ const store = new Vuex.Store({
             switch (value) {
                 case 0:
                     commit("SET_SQLDIALECT", "text/x-mysql");
+                    commit("SET_AVAILABLEQUERIES", MysqlQueries);
                     break;
                 case 1:
                     commit("SET_SQLDIALECT", "text/x-pgsql");
+                    commit("SET_AVAILABLEQUERIES", PostgresQueries);
                     break;
             }
             commit("SET_SELECTEDPRESET", 0);
@@ -443,6 +448,8 @@ const QueryTextArea  = new Vue({
     },
     watch: {
         query: function(val) {
+            if (val === this.editor.getValue())
+                return;
             this.editor.focus();
             this.editor.setValue(val);
             // this.editor.setCursor(this.editor.lineCount(), -1);
