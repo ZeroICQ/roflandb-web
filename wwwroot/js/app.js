@@ -1,5 +1,7 @@
 Vue.use(Vuex);
 
+const presets = ["", "MySQL", "Postgres"];
+
 const CancelToken = axios.CancelToken;
 var source;
 
@@ -16,7 +18,9 @@ const store = new Vuex.Store({
         database: "",
         
         showError: false,
-        errorMessage: ""
+        errorMessage: "",
+        
+        selectedPreset: 0
     },
     actions: {
         loadData({commit, state}) {
@@ -30,7 +34,7 @@ const store = new Vuex.Store({
             axios({
                 method: "POST",
                 url: "http://127.0.0.1:5000/api/sql",
-                timeout: 2000,
+                timeout: 5000,
                 headers : {
                     "Content-Type": "application/json"
                 },
@@ -70,32 +74,53 @@ const store = new Vuex.Store({
             source.cancel("Abort by user");
             commit("SET_LOADING", false);
         },
+
+        updateSelectedPreset({commit}, value) {
+            commit("SET_SELECTEDPRESET", value);
+            switch (value) {
+                //MySQL
+                case 1:
+                    commit("SET_USERNAME", "app");
+                    commit("SET_PASSWORD", "app");
+                    commit("SET_DATABASE", "app");
+                    commit("SET_HOST", "127.0.0.1");
+                    commit("SET_PORT", "3307");
+                    commit("SET_QUERY", "select * from users");
+                    break;
+            }
+        },
         
         closeErrorNotification({commit}, value) {
             commit("SET_ERRORSHOW", value)
         },
         
         updateQuery({commit}, value) {
+            commit("SET_SELECTEDPRESET", 0);
             commit("SET_QUERY", value)
         },
 
         updateUsername({commit}, value) {
+            commit("SET_SELECTEDPRESET", 0);
             commit("SET_USERNAME", value)
         },
         
         updatePassword({commit}, value) {
+            commit("SET_SELECTEDPRESET", 0);
             commit("SET_PASSWORD", value)
         },
-
+        
         updateHost({commit}, value) {
+            commit("SET_SELECTEDPRESET", 0);
             commit("SET_HOST", value)
         },
 
         updatePort({commit}, value) {
+            commit("SET_SELECTEDPRESET", 0);
             commit("SET_PORT", value)
         },
 
         updateDatabase({commit}, value) {
+            commit("SET_SELECTEDPRESET", 0);
             commit("SET_DATABASE", value)
         },
     },
@@ -138,6 +163,10 @@ const store = new Vuex.Store({
         
         SET_ERRORMESSAGE(state, value) {
             state.errorMessage = value;
+        },
+        
+        SET_SELECTEDPRESET(state, value) {
+            state.selectedPreset = value;
         }
         
     },
@@ -184,6 +213,10 @@ const store = new Vuex.Store({
         
         errorMessage(state) {
             return state.errorMessage;
+        },
+        
+        selectedPreset(state) {
+            return state.selectedPreset;
         }
     },
     modules: {}
@@ -192,6 +225,9 @@ const store = new Vuex.Store({
 const DatabaseForm = new Vue({
     el: "#db-form",
     store,
+    data: {
+      presets : presets  
+    },
     computed: {
         username : {
             get () {
@@ -237,6 +273,15 @@ const DatabaseForm = new Vue({
                 this.$store.dispatch("updateDatabase", value)
             }
         },
+        
+        selectedPreset: {
+            get() {
+                return this.$store.getters.selectedPreset
+            },
+            set (value) {
+                this.$store.dispatch("updateSelectedPreset", value)
+            }
+        }
     }
 });
 
