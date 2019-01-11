@@ -50,3 +50,8 @@ https://github.com/picturepan2/spectre/blob/master/src/_progress.scss
 .table-wrapper {
     overflow-x: auto;
 }
+
+.CodeMirror {
+    height: auto;
+}
+

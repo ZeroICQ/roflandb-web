@@ -34,6 +34,7 @@ const store = new Vuex.Store({
         selectedDbType: 0,
         availableQueries: {},
         selectedQuery: "",
+        sqlDialect: ""
     },
     actions: {
         loadData({commit, state}) {
@@ -105,6 +106,7 @@ const store = new Vuex.Store({
                     commit("SET_PORT", "3307");
                     commit("SET_SELECTEDDBTYPE", 0);
                     commit("SET_AVAILABLEQUERIES", MysqlQueries);
+                    commit("SET_SQLDIALECT", "text/x-mysql");
                     break;
                 case 2:
                     commit("SET_USERNAME", "postgres-user");
@@ -114,6 +116,7 @@ const store = new Vuex.Store({
                     commit("SET_PORT", "5433");
                     commit("SET_SELECTEDDBTYPE", 1);
                     commit("SET_AVAILABLEQUERIES", PostgresQueries);
+                    commit("SET_SQLDIALECT", "text/x-pgsql");
                     break
             }
         },
@@ -123,6 +126,14 @@ const store = new Vuex.Store({
         },
 
         updateSelectedDbType({commit}, value) {
+            switch (value) {
+                case 0:
+                    commit("SET_SQLDIALECT", "text/x-mysql");
+                    break;
+                case 1:
+                    commit("SET_SQLDIALECT", "text/x-pgsql");
+                    break;
+            }
             commit("SET_SELECTEDPRESET", 0);
             commit("SET_SELECTEDDBTYPE", value);
         },
@@ -217,8 +228,13 @@ const store = new Vuex.Store({
         
         SET_AVAILABLEQUERIES(state, value) {
             state.availableQueries = value;
+        },
+
+        SET_SQLDIALECT(state, value) {
+            state.sqlDialect = value;
         }
-        
+
+
     },
     getters: {
         isLoading(state) { 
@@ -279,6 +295,10 @@ const store = new Vuex.Store({
         
         availableQueries(state) {
             return state.availableQueries;
+        },
+        
+        sqlDialect(state) {
+            return state.sqlDialect;
         }
         
     },
@@ -378,7 +398,10 @@ const QueryTextArea  = new Vue({
         var that = this;
         // `this` points to the vm instance
         this.editor = CodeMirror.fromTextArea(this.$refs["query"], {
-            theme: "seti",
+            mode: "text/sql",
+            lineNumbers: true,
+            viewportMargin: Infinity,
+            theme: "elegant",
             extraKeys: {
                 "Ctrl-Enter": function(cm) {
                     that.$store.dispatch('loadData');
@@ -393,8 +416,13 @@ const QueryTextArea  = new Vue({
         this.editor.on("keyHandled", function (instance, name, event) {
             console.log(name);
         });
+
+        // this.editor.display.wrapper.classList.add("textarea");
     },
     computed: {
+        sqlDialect() {
+            return this.$store.getters.sqlDialect
+        },
         query: {
             get () {
                 return this.$store.getters.query
@@ -409,6 +437,10 @@ const QueryTextArea  = new Vue({
             this.editor.focus();
             this.editor.setValue(val);
             this.editor.setCursor(this.editor.lineCount(), -1);
+        },
+        
+        sqlDialect:  function(val) {
+            this.editor.setOption("mode", val);
         }
     },
     methods: {
