@@ -42,3 +42,7 @@ https://github.com/picturepan2/spectre/blob/master/src/_progress.scss
         background-position: -200% 0;
     }
 }
+
+[v-cloak] { 
+    display: none
+}

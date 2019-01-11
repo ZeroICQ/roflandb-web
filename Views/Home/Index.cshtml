@@ -64,7 +64,7 @@
                         
                         <div class="field">
                             <p class="control is-expanded">
-                                <input class="input" type="number" v-model="port" placeholder="port" min="1" max="65000">
+                                <input class="input" type="number" v-model="port" placeholder="port" min="1" max="65535">
                             </p>
                         </div>
                         
@@ -85,14 +85,21 @@
             <div class="container is-child">
                 <textarea id="query" class="textarea" placeholder="Enter query..." v-model="query"></textarea>
     
-                <span v-on:click="submit" id="submit-button" class="button is-success is-fullwidth" :disabled="isLoading">Run query</span>
+                <button v-on:click="submit" id="submit-button" class="button is-success is-fullwidth" :disabled="isLoading">Run query</button>
     
     
-                <div v-if="isLoading" id="progress-bar" class="container">
+                <div v-if="isLoading" id="progress-bar" class="container" v-cloak>
                     <progress class="progress is-info is-large" max="100">45%</progress>
+                    <button class="delete" v-on:click="abortRequest"></button>
+                </div>
+                
+                @* error notification *@
+                <div class="notification is-danger error-notification" v-cloak v-if="isShowError">
+                    <button class="delete" v-on:click="closeNotification"></button>
+                    {{errorMessage}}
                 </div>
     
-                <table id="result-table" v-if="!isLoading" class="table is-bordered is-hoverable is-fullwidth">
+                <table id="result-table" v-if="!isLoading" v-cloak class="table is-bordered is-hoverable is-fullwidth">
                     <thead>
                     <th v-for="title in titles">{{title}}</th>
                     </thead>

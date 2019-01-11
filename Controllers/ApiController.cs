@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -19,15 +20,14 @@ namespace RoflandbWeb.Controllers {
         [EnableCors("AnyCors")]
         public IActionResult Sql([FromBody] SqlRequestModel r) {
             if (!ModelState.IsValid)
-                return new JsonResult(new {errors = ModelState });
+                return BadRequest(new {validationErrors = ModelState });
                     
             try {
                 return new JsonResult(_mysql.Execute(r.User, r.Password, r.Host, r.Port, r.Database, r.Query));
             }
             catch (MySqlException e) {
-                return new JsonResult( new {Error = e.Message});
+                return BadRequest(new {dbError = e.Message});
             }
-            
         }
     }
 }

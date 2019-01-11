@@ -1,5 +1,8 @@
 Vue.use(Vuex);
 
+const CancelToken = axios.CancelToken;
+var source;
+
 const store = new Vuex.Store({
     state: {
         isLoading: false,
@@ -10,25 +13,65 @@ const store = new Vuex.Store({
         password: "",
         host: "",
         port:  3307,
-        database: ""
+        database: "",
+        
+        showError: false,
+        errorMessage: ""
     },
     actions: {
         loadData({commit, state}) {
             commit('SET_LOADING');
-            axios.post("http://127.0.0.1:5000/api/sql", {
-                user: state.username,
-                password: state.password,
-                host: state.host,
-                database: state.database,
-                port: state.port,
-                query: state.query
+            commit("SET_ERRORSHOW", false);
+            state.data = [];
+            source = CancelToken.source();
+            axios({
+                method: "POST",
+                url: "http://127.0.0.1:5000/api/sql",
+                timeout: 2000,
+                headers : {
+                    "Content-Type": "application/json"
+                },
+                cancelToken: source.token,
+                data : {
+                    user: state.username,
+                    password: state.password,
+                    host: state.host,
+                    database: state.database,
+                    port: state.port,
+                    query: state.query
+                }
             }).then(response => {
                 state.data = response.data;
-                commit('SET_NOT_LOADING');
-            }).catch(e => console.log(e));
-            
+            }).catch(
+                e => {
+                    if (axios.isCancel(e)) {
+                        console.log("Request canceled. ", e.message);
+                        return;
+                    } 
+                    
+                    if (e.code === "ECONNABORTED") {
+                        commit("SET_ERRORMESSAGE", e.message);
+                    }
+                    else {
+                        commit("SET_ERRORMESSAGE", e.response.data);
+                    }
+                    // console.log(e.response.data);
+                    commit("SET_ERRORSHOW", true);
+                }
+            ).finally(
+                () => commit('SET_NOT_LOADING')
+            );
         },
-
+        
+        abortPendingRequest({commit}) {
+            source.cancel("Abort by user");
+            commit("SET_LOADING", false);
+        },
+        
+        closeErrorNotification({commit}, value) {
+            commit("SET_ERRORSHOW", value)
+        },
+        
         updateQuery({commit}, value) {
             commit("SET_QUERY", value)
         },
@@ -85,6 +128,14 @@ const store = new Vuex.Store({
         SET_DATABASE(state, value) {
             state.database = value;
         },
+
+        SET_ERRORSHOW(state, value) {
+            state.showError = value;
+        },
+        
+        SET_ERRORMESSAGE(state, value) {
+            state.errorMessage = value;
+        }
         
     },
     getters: {
@@ -123,6 +174,14 @@ const store = new Vuex.Store({
         database(state) {
             return state.database;
         },
+
+        showError(state) {
+            return state.showError;
+        },
+        
+        errorMessage(state) {
+            return state.errorMessage;
+        }
     },
     modules: {}
 });
@@ -193,6 +252,25 @@ const QueryTextArea  = new Vue({
     }
 });
 
+const ErrorNotification = new Vue({
+    el: ".error-notification",
+    store,
+    computed : {
+        isShowError() {
+            return this.$store.getters.showError
+        },
+        
+        errorMessage() {
+            return this.$store.getters.errorMessage
+        }
+    },
+    methods: {
+        closeNotification() {
+            this.$store.dispatch("closeErrorNotification")
+        }
+    }
+});
+
 const SubmitButton = new Vue({
     el: "#submit-button",
     store,
@@ -220,7 +298,12 @@ const ProgressBar = new Vue({
         isLoading() {
             return this.$store.getters.isLoading;
         }
-},
+    },
+    methods : {
+        abortRequest() {
+            this.$store.dispatch("abortPendingRequest")
+        }
+    }
 });
 
 

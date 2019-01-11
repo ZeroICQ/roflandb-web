@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 namespace RoflandbWeb.Models {
     
     public class SqlRequestModel {
+        public enum DbType {Mysql, Postgres}
+        
         [Required]
         public string User { get; set; }
         
@@ -22,5 +24,8 @@ namespace RoflandbWeb.Models {
         
         [Required]
         public string Query { get; set; }
-    }
+        
+//        [Required]
+//        public
+        }
 }
