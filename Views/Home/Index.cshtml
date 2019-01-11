@@ -119,7 +119,7 @@
         <div class="tile is-12 is-parent">
     
             <div class="container is-child">
-                <textarea id="query" ref="query" class="textarea" placeholder="Enter query..." v-model="query" @@keyup.ctrl.enter="submit" ></textarea>
+                <textarea id="query" ref="query" class="textarea" placeholder="Enter query..." v-model="query" @@keyup.ctrl.enter="submit"></textarea>
     
                 <button v-on:click="submit" id="submit-button" class="button is-success is-fullwidth" :disabled="isLoading">Run query</button>
     

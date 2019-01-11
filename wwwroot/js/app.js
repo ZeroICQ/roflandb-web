@@ -416,7 +416,16 @@ const QueryTextArea  = new Vue({
         this.editor.on("keyHandled", function (instance, name, event) {
             console.log(name);
         });
-
+        
+        var val = "";
+        
+        for (var i = 0; i< 6; i++) {
+            val += "\n";
+        }
+        
+        // this.editor.setValue(val);
+        // this.editor.setCursor(0,0);
+        
         // this.editor.display.wrapper.classList.add("textarea");
     },
     computed: {
@@ -436,7 +445,7 @@ const QueryTextArea  = new Vue({
         query: function(val) {
             this.editor.focus();
             this.editor.setValue(val);
-            this.editor.setCursor(this.editor.lineCount(), -1);
+            // this.editor.setCursor(this.editor.lineCount(), -1);
         },
         
         sqlDialect:  function(val) {
