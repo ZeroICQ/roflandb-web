@@ -20,6 +20,9 @@ const store = new Vuex.Store({
     },
     actions: {
         loadData({commit, state}) {
+            if (state.isLoading)
+                return;
+            
             commit('SET_LOADING');
             commit("SET_ERRORSHOW", false);
             state.data = [];
@@ -249,6 +252,11 @@ const QueryTextArea  = new Vue({
                 this.$store.dispatch("updateQuery", value);
             }
         }
+    },
+    methods: {
+        submit() {
+            this.$store.dispatch('loadData');
+        }
     }
 });
 
@@ -284,8 +292,7 @@ const SubmitButton = new Vue({
     },
     methods: {
         submit() {
-            if (!this.$store.getters.isLoading)
-                this.$store.dispatch('loadData');
+            this.$store.dispatch('loadData');
         }
     }
 });
