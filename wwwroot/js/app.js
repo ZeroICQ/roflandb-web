@@ -1,6 +1,6 @@
 Vue.use(Vuex);
 
-const presets = ["", "MySQL", "Postgres"];
+const presets = ["", "MySQL", "Postgres", "MariaDB"];
 const dbTypes = ["MySQL", "Postgres"];
 
 const MysqlQueries = {
@@ -27,7 +27,7 @@ const store = new Vuex.Store({
         username: "",
         password: "",
         host: "",
-        port:  3307,
+        port: 3307,
         database: "",
         
         showError: false,
@@ -120,7 +120,18 @@ const store = new Vuex.Store({
                     commit("SET_SELECTEDDBTYPE", 1);
                     commit("SET_AVAILABLEQUERIES", PostgresQueries);
                     commit("SET_SQLDIALECT", "text/x-pgsql");
-                    break
+                    break;
+                case 3:
+                    commit("SET_USERNAME", "app");
+                    commit("SET_PASSWORD", "app");
+                    commit("SET_DATABASE", "app");
+                    commit("SET_HOST", "127.0.0.1");
+                    commit("SET_PORT", "3308");
+                    commit("SET_SELECTEDDBTYPE", 0);
+                    commit("SET_AVAILABLEQUERIES", MysqlQueries);
+                    commit("SET_SQLDIALECT", "text/x-mysql");
+                    break;
+                    
             }
         },
 
